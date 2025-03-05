@@ -12,12 +12,14 @@ require_once "db.php";
 <body>
 <div class="container2" id="authContainer2">
     <div class="register-box" id="Register-Box">
-        <h2>Registreren</h2>
-        <input type="text" id="registerUser" placeholder="Gebruikersnaam">
-        <input type="email" id="emailUser" placeholder="E-Mail">
-        <input type="password" id="registerPass" placeholder="Wachtwoord">
-        <button>Register</button>
-        <p>Heb je al een account? <a href="index.php">Login</a></p>
+        <h2>Registreren op Chirpyfy</h2>
+        <form action="register_user.php" method="post">
+            <input type="text" name="registerUser" placeholder="Gebruikersnaam" required>
+            <input type="email" name="emailUser" placeholder="E-Mail" required>
+            <input type="password" name="registerPass" placeholder="Wachtwoord" required>
+            <button type="submit">Registreren</button>
+        </form>
+        <p>Heb je al een account? <a href="index.php">Inloggen</a></p>
     </div>
 </div>
 </body>

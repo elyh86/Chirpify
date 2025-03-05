@@ -6,24 +6,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
 }
-.container {
-    height: 300px;
-    width: 600px;
+.container, .container2 {
+    width: 400px;
     background: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-.container2 {
-    height: 330px;
-    width: 600px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
 }
 .header {
     display: flex;
@@ -32,16 +22,16 @@ body {
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
 }
-h1 {
+h1, h2 {
     color: #1da1f2;
     font-size: 24px;
     font-weight: bold;
+    text-align: center;
 }
 .login-box, .register-box {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
 }
 input, textarea {
     padding: 10px;
@@ -58,5 +48,14 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 5px;
+}
+p {
+    text-align: center;
+}
+a {
+    color: #1da1f2;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }

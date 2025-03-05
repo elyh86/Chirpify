@@ -1,5 +1,5 @@
 <?php
-require db.php;
+require_once "db.php";
 ?>
 
 <html lang="nl">
@@ -12,11 +12,14 @@ require db.php;
 <body>
 <div class="container" id="authContainer">
     <div class="login-box" id="loginBox">
-        <h2>Inloggen</h2>
-        <input type="text" id="loginUser" placeholder="Gebruikersnaam">
-        <input type="password" id="loginPass" placeholder="Wachtwoord">
-        <button onclick="login()">Login</button>
-        <p>Nog geen account? <a href="register.php" onclick="showRegister()">Registreer</a></p>
+        <h2>Inloggen op Chirpyfy</h2>
+        <form action="login.php" method="post">
+            <input type="text" name="loginUser" placeholder="Telefoon, e-mail of gebruikersnaam" required>
+            <input type="password" name="loginPass" placeholder="Wachtwoord" required>
+            <button type="submit">Inloggen</button>
+        </form>
+        <p><a href="forgot_password.php">Wachtwoord vergeten?</a></p>
+        <p>Nog geen account? <a href="register.php">Meld je aan</a></p>
     </div>
 </div>
 </body>
