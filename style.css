@@ -1,188 +1,76 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #e6ecf0;
-    background-image: url('background.jpg'); /* Add a Twitter-like background image */
-    background-size: cover;
-    background-position: center;
+:root {
+    --primary: #1d9bf0;
+    --bg: #ffffff;
+    --text: #0f1419;
+    --gray: #536471;
+    --border: #eff3f4;
+}
+
+* {
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Center items vertically */
-    height: 100vh;
+    box-sizing: border-box;
 }
-.container, .container2 {
-    width: 400px; /* Adjust width for better spacing */
-    background: white;
-    padding: 30px; /* Increase padding for better spacing */
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 20px; /* Add margin for better spacing */
+
+body {
+    font-family: -apple-system, system-ui, sans-serif;
+    line-height: 1.4;
+    background: var(--bg);
 }
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Space between items */
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-    margin-bottom: 20px; /* Add margin for better spacing */
-    background-color: #1da1f2; /* Add background color */
-    color: white; /* Change text color */
-    padding: 20px; /* Add padding */
-    border-radius: 10px; /* Add border radius */
+
+/* Layout */
+.container {
+    max-width: 1265px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 275px 1fr 350px;
+    min-height: 100vh;
 }
-.header h1 {
-    font-size: 24px;
-    font-weight: bold;
-}
-.header .nav {
-    display: flex;
-    gap: 20px; /* Add gap between navigation items */
-}
-.header .nav a {
-    color: white; /* Change text color */
-    text-decoration: none;
-    font-size: 18px;
-}
-.header .nav a:hover {
-    text-decoration: underline;
-}
-h1, h2 {
-    color: #1da1f2;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-}
-.login-box, .register-box, .post-box, .posts {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Increase gap for better spacing */
-}
-input, textarea {
-    padding: 15px; /* Increase padding for better spacing */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
-}
-button {
-    background: #1da1f2;
+
+/* Components */
+.btn {
+    background: var(--primary);
     color: white;
     border: none;
-    padding: 15px;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-}
-button:hover {
-    background: #0d8ddb;
-}
-p {
-    font-size: 14px;
-    text-align: center;
-}
-a {
-    font-size: 14px;
-    color: #1da1f2;
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
-}
-.post {
-    background: #fff;
-    padding: 20px; /* Increase padding for better spacing */
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px; /* Add margin for better spacing */
-}
-.post img {
-    max-width: 100%;
-    border-radius: 5px;
-}
-.post-actions {
-    display: flex;
-    justify-content: space-between; /* Space between items */
-    margin-top: 10px;
-}
-.post-actions a {
-    color: #1da1f2;
-    text-decoration: none;
-    font-size: 14px;
-}
-.post-actions a:hover {
-    text-decoration: underline;
-}
-.like-count {
-    display: flex;
-    align-items: center;
-    gap: 5px; /* Add gap between icon and count */
-}
-.like-count span {
-    font-size: 14px;
-    color: #1da1f2;
 }
 
-/* Additional styles for Twitter-like login and register pages */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Increase gap for better spacing */
-}
-input[type="text"], input[type="email"], input[type="password"] {
-    padding: 15px;
-    border: 1px solid #e1e8ed;
-    border-radius: 5px;
-    font-size: 18px;
-}
-
-/* Logo styling */
-.logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px; /* Add margin for better spacing */
-}
-.logo img {
-    width: 50px; /* Adjust logo size */
-    height: auto;
-}
-
-/* Sidebar styling */
-.sidebar {
-    width: 200px;
+.card {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 20px; /* Add margin for better spacing */
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-}
-.sidebar h2 {
-    color: #1da1f2;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px; /* Add margin for better spacing */
-}
-.sidebar a {
-    display: block;
-    color: #1da1f2;
-    text-decoration: none;
-    font-size: 18px;
-    margin-bottom: 10px; /* Add margin for better spacing */
-}
-.sidebar a:hover {
-    text-decoration: underline;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Error message styling */
-.error-message {
-    color: red;
-    font-size: 14px;
-    text-align: center;
-    margin-top: -10px; /* Adjust margin to fit within the login box */
+/* Posts */
+.post {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
 }
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 16px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+/* Utilities */
+.error { color: #dc2626; }
+.success { color: #059669; }
