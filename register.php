@@ -1,53 +1,37 @@
 <?php
 require_once "db.php";
+session_start();
 
 $error_message = "";
-$success_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $username = trim($_POST['registerUser']);
+    $email = trim($_POST['registerEmail']);
+    $password = $_POST['registerPass'];
+    $confirm_password = $_POST['confirmPass'];
 
-    // Validation
-    if (empty($username) || empty($email) || empty($password)) {
-        $error_message = "All fields are required";
-    } elseif ($password !== $confirm_password) {
+    if ($password !== $confirm_password) {
         $error_message = "Passwords do not match";
     } else {
         try {
-            // Check if username already exists
-            $stmt = $conn->prepare("SELECT user_id FROM users WHERE username = :username");
+            $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
             $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':email', $email);
             $stmt->execute();
-            
-            if ($stmt->rowCount() > 0) {
-                $error_message = "Username already exists";
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                $error_message = "Username or email already exists";
             } else {
-                // Check if email already exists
-                $stmt = $conn->prepare("SELECT user_id FROM users WHERE email = :email");
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+                $stmt->bindParam(':username', $username);
                 $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':password', $hashed_password);
                 $stmt->execute();
-                
-                if ($stmt->rowCount() > 0) {
-                    $error_message = "Email already exists";
-                } else {
-                    // Hash password
-                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                    
-                    // Insert new user
-                    $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
-                    $stmt->bindParam(':username', $username);
-                    $stmt->bindParam(':email', $email);
-                    $stmt->bindParam(':password', $hashed_password);
-                    
-                    if ($stmt->execute()) {
-                        $success_message = "Registration successful! You can now login.";
-                    } else {
-                        $error_message = "Registration failed";
-                    }
-                }
+                $_SESSION['user_id'] = $conn->lastInsertId();
+                header("Location: index.php");
+                exit();
             }
         } catch (PDOException $e) {
             $error_message = "Database error: " . $e->getMessage();
@@ -61,42 +45,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Chirpify</title>
+    <title>Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container" id="authContainer">
     <div class="register-box">
-        <h2>Registreren bij Chirpify</h2>
+        <div class="twitter-icon">
+            <i class="fab fa-twitter"></i>
+        </div>
+        <h2>Registreer je op Chirpify</h2>
         
         <?php if ($error_message): ?>
-            <p class="error-message"><?php echo htmlspecialchars($error_message); ?></p>
-        <?php endif; ?>
-        
-        <?php if ($success_message): ?>
-            <p class="success-message"><?php echo htmlspecialchars($success_message); ?></p>
+            <div class="error-message">
+                <?php echo htmlspecialchars($error_message); ?>
+            </div>
         <?php endif; ?>
 
         <form method="post" action="">
-            <div class="form-group">
-                <input type="text" name="username" placeholder="Gebruikersnaam" required>
+            <div class="form-field">
+                <input type="text" 
+                       id="registerUser" 
+                       name="registerUser" 
+                       placeholder="Gebruikersnaam"
+                       required>
             </div>
             
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email" required>
+            <div class="form-field">
+                <input type="email" 
+                       id="registerEmail" 
+                       name="registerEmail" 
+                       placeholder="E-mail"
+                       required>
             </div>
             
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Wachtwoord" required>
+            <div class="form-field">
+                <input type="password" 
+                       id="registerPass" 
+                       name="registerPass" 
+                       placeholder="Wachtwoord"
+                       required>
             </div>
             
-            <div class="form-group">
-                <input type="password" name="confirm_password" placeholder="Bevestig wachtwoord" required>
+            <div class="form-field">
+                <input type="password" 
+                       id="confirmPass" 
+                       name="confirmPass" 
+                       placeholder="Bevestig wachtwoord"
+                       required>
             </div>
             
             <button type="submit">Registreren</button>
         </form>
-        
+
         <p>Al een account? <a href="login.php">Log in</a></p>
     </div>
 </div>
