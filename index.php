@@ -83,14 +83,9 @@ try {
             <i class="fab fa-twitter"></i>
         </div>
         <ul class="menu">
-            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="#"><i class="fas fa-hashtag"></i> Explore</a></li>
-            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
-            <li><a href="#"><i class="fas fa-bookmark"></i> Bookmarks</a></li>
-            <li><a href="#"><i class="fas fa-list"></i> Lists</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
-            <li><a href="#"><i class="fas fa-ellipsis-h"></i> More</a></li>
+            <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
         <button class="btn">Tweet</button>
     </div>
@@ -150,16 +145,6 @@ try {
             <?php endforeach; ?>
         </div>
     </div>
-    <div class="right-sidebar">
-        <div class="search-box">
-            <input type="text" placeholder="Search Twitter">
-        </div>
-        <div class="trends">
-            <h2>Trends for you</h2>
-            <!-- Add trends content here -->
-        </div>
-    </div>
 </div>
-<a href="logout.php">Logout</a>
 </body>
 </html>

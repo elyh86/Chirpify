@@ -35,6 +35,21 @@ try {
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();
 }
+
+// Fetch likes and reposts
+try {
+    $stmt = $conn->prepare("SELECT * FROM likes WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $_SESSION['user_id']);
+    $stmt->execute();
+    $likes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $conn->prepare("SELECT * FROM reposts WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $_SESSION['user_id']);
+    $stmt->execute();
+    $reposts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Database error: " . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
@@ -54,19 +69,19 @@ try {
         </div>
         <ul class="menu">
             <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="#"><i class="fas fa-hashtag"></i> Explore</a></li>
-            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
-            <li><a href="#"><i class="fas fa-bookmark"></i> Bookmarks</a></li>
-            <li><a href="#"><i class="fas fa-list"></i> Lists</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
-            <li><a href="#"><i class="fas fa-ellipsis-h"></i> More</a></li>
+            <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
         <button class="btn">Tweet</button>
     </div>
     <div class="main-content">
         <div class="header">
             <h1><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
+        </div>
+        <div class="profile-info">
+            <img src="avatar.png" alt="Avatar" class="avatar">
+            <h2><?php echo htmlspecialchars($user['username']); ?></h2>
+            <p><?php echo htmlspecialchars($user['email']); ?></p>
         </div>
         <div class="posts">
             <?php foreach ($posts as $post): ?>
@@ -114,16 +129,6 @@ try {
             <?php endforeach; ?>
         </div>
     </div>
-    <div class="right-sidebar">
-        <div class="search-box">
-            <input type="text" placeholder="Search Twitter">
-        </div>
-        <div class="trends">
-            <h2>Trends for you</h2>
-            <!-- Add trends content here -->
-        </div>
-    </div>
 </div>
-<a href="logout.php">Logout</a>
 </body>
 </html>
