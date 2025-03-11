@@ -27,18 +27,36 @@ body {
     max-width: 1265px;
     margin: 0 auto;
     padding: 20px;
+    justify-content: space-between;
 }
 
-.sidebar, .right-sidebar {
+.sidebar {
     width: 275px;
     padding: 20px;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
 }
 
 .main-content {
     flex: 1;
     padding: 20px;
+    margin-left: 295px;
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
+}
+
+.right-sidebar {
+    width: 275px;
+    padding: 20px;
+    position: fixed;
+    right: 0;
+    height: 100%;
+    overflow-y: auto;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
 }
 
 #authContainer {
@@ -252,6 +270,11 @@ button[type="submit"]:hover {
 
 .error-message {
     color: var(--error);
+    margin-bottom: 20px;
+}
+
+.success-message {
+    color: var(--success);
     margin-bottom: 20px;
 }
 
