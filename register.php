@@ -14,6 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Passwords do not match";
     } else {
         try {
+            // Ensure $conn is defined
+            global $conn;
             $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':email', $email);
