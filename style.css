@@ -336,3 +336,9 @@ a:hover {
 .profile-info p {
     color: var(--gray);
 }
+
+.profile-info .biography {
+    margin-top: 10px;
+    font-size: 16px;
+    color: var(--text);
+}

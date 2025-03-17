@@ -21,6 +21,14 @@ try {
         header("Location: index.php");
         exit();
     }
+
+    // Initialize biography and profile_picture if not set
+    if (!isset($user['biography'])) {
+        $user['biography'] = '';
+    }
+    if (!isset($user['profile_picture']) || empty($user['profile_picture'])) {
+        $user['profile_picture'] = 'default_avatar.png'; // Default avatar image
+    }
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();
     exit();
@@ -77,17 +85,21 @@ try {
     <div class="main-content">
         <div class="header">
             <h1><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
+            <?php if ($user_id == $_SESSION['user_id']): ?>
+                <a href="edit_profile.php" class="btn">Edit Profile</a>
+            <?php endif; ?>
         </div>
         <div class="profile-info">
-            <img src="avatar.png" alt="Avatar" class="avatar">
+            <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Avatar" class="avatar">
             <h2><?php echo htmlspecialchars($user['username']); ?></h2>
             <p><?php echo htmlspecialchars($user['email']); ?></p>
+            <p><?php echo htmlspecialchars($user['biography']); ?></p>
         </div>
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <div class="post-header">
-                        <img src="avatar.png" alt="Avatar" class="avatar">
+                        <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Avatar" class="avatar">
                         <div>
                             <p><strong><?php echo htmlspecialchars($user['username']); ?></strong></p>
                             <p><small><?php echo $post['created_at']; ?></small></p>

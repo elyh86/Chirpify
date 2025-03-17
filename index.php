@@ -19,6 +19,11 @@ try {
         header("Location: login.php");
         exit();
     }
+
+    // Initialize profile_picture if not set
+    if (!isset($user['profile_picture']) || empty($user['profile_picture'])) {
+        $user['profile_picture'] = 'default_avatar.png'; // Default avatar image
+    }
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();
     exit();
@@ -43,8 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['new_post'])) {
 }
 
 // Fetch all posts
+$posts = [];
 try {
-    $stmt = $conn->prepare("SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at DESC");
+    $stmt = $conn->prepare("SELECT posts.*, users.username, users.profile_picture FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at DESC");
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -103,7 +109,7 @@ try {
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <div class="post-header">
-                        <img src="avatar.png" alt="Avatar" class="avatar">
+                        <img src="<?php echo htmlspecialchars($post['profile_picture']); ?>" alt="Avatar" class="avatar">
                         <div>
                             <p><strong><a href="profile.php?user_id=<?php echo $post['user_id']; ?>"><?php echo htmlspecialchars($post['username']); ?></a></strong></p>
                             <p><small><?php echo $post['created_at']; ?></small></p>
