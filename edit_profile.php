@@ -62,13 +62,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($profile_picture['size'] > 0) {
                 $target_dir = "uploads/";
+                if (!is_dir($target_dir)) {
+                    mkdir($target_dir, 0777, true);
+                }
                 $target_file = $target_dir . basename($profile_picture["name"]);
-                move_uploaded_file($profile_picture["tmp_name"], $target_file);
-
-                $stmt = $conn->prepare("UPDATE users SET profile_picture = :profile_picture WHERE user_id = :user_id");
-                $stmt->bindParam(':profile_picture', $target_file);
-                $stmt->bindParam(':user_id', $user_id);
-                $stmt->execute();
+                if (move_uploaded_file($profile_picture["tmp_name"], $target_file)) {
+                    $stmt = $conn->prepare("UPDATE users SET profile_picture = :profile_picture WHERE user_id = :user_id");
+                    $stmt->bindParam(':profile_picture', $target_file);
+                    $stmt->bindParam(':user_id', $user_id);
+                    $stmt->execute();
+                } else {
+                    $error_message = "Failed to upload profile picture.";
+                }
             }
 
             $success_message = "Profile updated successfully";

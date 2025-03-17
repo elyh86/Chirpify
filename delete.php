@@ -12,10 +12,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['user_id'];
 
     try {
-        $stmt = $conn->prepare("DELETE FROM posts WHERE post_id = :post_id AND user_id = :user_id");
+        // Check if the post belongs to the user
+        $stmt = $conn->prepare("SELECT * FROM posts WHERE post_id = :post_id AND user_id = :user_id");
         $stmt->bindParam(':post_id', $post_id);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
+        $post = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($post) {
+            $stmt = $conn->prepare("DELETE FROM posts WHERE post_id = :post_id AND user_id = :user_id");
+            $stmt->bindParam(':post_id', $post_id);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+        }
     } catch (PDOException $e) {
         echo "Database error: " . $e->getMessage();
     }

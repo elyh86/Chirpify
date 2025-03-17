@@ -84,7 +84,7 @@ try {
     </div>
     <div class="main-content">
         <div class="header">
-            <h1><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
+            <h1 style="margin-bottom: 20px;"><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
             <?php if ($user_id == $_SESSION['user_id']): ?>
                 <a href="edit_profile.php" class="btn">Edit Profile</a>
             <?php endif; ?>
