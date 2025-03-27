@@ -9,11 +9,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['loginPass'];
 
     try {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
+        // Check by username
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
         $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':email', $username);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If not found by username, check by email
+        if (!$user) {
+            $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $username);
+            $stmt->execute();
+            if (!$user) {
+                $error_message = "Invalid username or email";
+            } elseif (!password_verify($password, $user['password'])) {
+                $error_message = "Invalid password";
+            }
+        }
 
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['user_id'];
