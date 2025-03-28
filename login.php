@@ -9,23 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['loginPass'];
 
     try {
-        // Check by username
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $username);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // If not found by username, check by email
-        if (!$user) {
-            $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->bindParam(':email', $username);
-            $stmt->execute();
-            if (!$user) {
-                $error_message = "Invalid username or email";
-            } elseif (!password_verify($password, $user['password'])) {
-                $error_message = "Invalid password";
-            }
-        }
 
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['user_id'];
@@ -55,13 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <i class="fab fa-twitter"></i>
         </div>
         <h2>Log in op Chirpify</h2>
-        
         <?php if ($error_message): ?>
             <div class="error-message">
                 <?php echo htmlspecialchars($error_message); ?>
             </div>
         <?php endif; ?>
-
         <form method="post" action="">
             <div class="form-field">
                 <input type="text" 
@@ -70,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="E-mail of gebruikersnaam"
                        required>
             </div>
-            
             <div class="form-field">
                 <input type="password" 
                        id="loginPass" 
@@ -78,10 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="Wachtwoord"
                        required>
             </div>
-            
             <button type="submit">Inloggen</button>
         </form>
-
         <p><a href="forgot_password.php">Wachtwoord vergeten?</a></p>
         <p>Nog geen account? <a href="register.php">Registreer je nu</a></p>
     </div>

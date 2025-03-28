@@ -34,9 +34,15 @@ try {
     exit();
 }
 
-// Fetch user's posts
+// Fetch user's posts and reposts
 try {
-    $stmt = $conn->prepare("SELECT * FROM posts WHERE user_id = :user_id ORDER BY created_at DESC");
+    $stmt = $conn->prepare("
+        SELECT posts.*, users.username, users.profile_picture 
+        FROM posts 
+        JOIN users ON posts.user_id = users.user_id 
+        WHERE posts.user_id = :user_id OR posts.post_id IN (SELECT post_id FROM reposts WHERE user_id = :user_id)
+        ORDER BY posts.created_at DESC
+    ");
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -99,9 +105,9 @@ try {
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <div class="post-header">
-                        <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Avatar" class="avatar">
+                        <img src="<?php echo htmlspecialchars($post['profile_picture']); ?>" alt="Avatar" class="avatar">
                         <div>
-                            <p><strong><?php echo htmlspecialchars($user['username']); ?></strong></p>
+                            <p><strong><?php echo htmlspecialchars($post['username']); ?></strong></p>
                             <p><small><?php echo $post['created_at']; ?></small></p>
                         </div>
                     </div>
@@ -116,23 +122,32 @@ try {
                             }
                         }
                         ?>
-                        <form method="post" action="like.php">
+                        <form method="post" action="like.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>">
-                                <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?>
+                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" style="border: none; background: none; cursor: pointer;">
+                                <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
                             </button>
                         </form>
-                        <form method="post" action="repost.php">
+                        <?php
+                        $reposted = false;
+                        foreach ($reposts as $repost) {
+                            if ($repost['post_id'] == $post['post_id']) {
+                                $reposted = true;
+                                break;
+                            }
+                        }
+                        ?>
+                        <form method="post" action="repost.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="repost">
-                                <i class="fas fa-retweet"></i> Repost
+                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" style="border: none; background: none; cursor: pointer;">
+                                <i class="fas fa-retweet"></i> <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
                             </button>
                         </form>
                         <?php if ($post['user_id'] == $_SESSION['user_id']): ?>
-                            <form method="post" action="delete.php">
+                            <form method="post" action="delete.php" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                                <button type="submit" name="delete">
-                                    <i class="fas fa-trash"></i> Delete
+                                <button type="submit" name="delete" style="border: none; background: none; cursor: pointer;">
+                                    <i class="fas fa-trash"></i> 🗑️ Delete
                                 </button>
                             </form>
                         <?php endif; ?>
