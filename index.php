@@ -87,6 +87,7 @@ try {
         <ul class="menu">
             <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li> <!-- Home link -->
             <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li> <!-- Profile link -->
+            <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li> <!-- About link -->
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li> <!-- Logout link -->
         </ul>
         <button class="btn">Tweet</button> <!-- Tweet button -->
@@ -124,8 +125,8 @@ try {
                         ?>
                         <form method="post" action="like.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>"> <!-- Hidden input for post ID -->
-                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" style="border: none; background: none; cursor: pointer;">
-                                <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
+                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" class="action-btn">
+                                ❤️ <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
                             </button>
                         </form>
                         <?php
@@ -139,18 +140,50 @@ try {
                         ?>
                         <form method="post" action="repost.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>"> <!-- Hidden input for post ID -->
-                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" style="border: none; background: none; cursor: pointer;">
-                                <i class="fas fa-retweet"></i> <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
+                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" class="action-btn">
+                                🔁 <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
                             </button>
                         </form>
                         <?php if ($post['user_id'] == $_SESSION['user_id']): ?> <!-- Check if the post belongs to the user -->
                             <form method="post" action="delete.php" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>"> <!-- Hidden input for post ID -->
-                                <button type="submit" name="delete" style="border: none; background: none; cursor: pointer;">
-                                    <i class="fas fa-trash"></i> 🗑️ Delete
-                                </button>
+                                <button type="submit" name="delete" class="action-btn">🗑️ Delete</button>
                             </form>
                         <?php endif; ?>
+                    </div>
+                    <div class="comments">
+                        <h4>Comments</h4>
+                        <?php
+                        // Prepare a new statement for fetching comments
+                        $commentStmt = $conn->prepare("SELECT comments.*, users.username, users.profile_picture 
+                                                       FROM comments 
+                                                       JOIN users ON comments.user_id = users.user_id 
+                                                       WHERE comments.post_id = :post_id ORDER BY comments.created_at ASC");
+                        $commentStmt->bindParam(':post_id', $post['post_id'], PDO::PARAM_INT);
+                        $commentStmt->execute(); // Execute the query
+                        $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all comments for the post
+                        ?>
+                        <?php foreach ($comments as $comment): ?> <!-- Loop through each comment -->
+                            <div class="comment">
+                                <img src="<?php echo htmlspecialchars($comment['profile_picture']); ?>" alt="Avatar" class="avatar"> <!-- Comment author's avatar -->
+                                <div>
+                                    <p><strong><?php echo htmlspecialchars($comment['username']); ?></strong></p> <!-- Comment author's username -->
+                                    <p><?php echo htmlspecialchars($comment['content']); ?></p> <!-- Comment content -->
+                                    <p><small><?php echo $comment['created_at']; ?></small></p> <!-- Comment creation date -->
+                                </div>
+                                <?php if ($comment['user_id'] == $_SESSION['user_id']): ?> <!-- Check if the comment belongs to the user -->
+                                    <form method="post" action="delete_comment.php" style="display: inline;">
+                                        <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id']; ?>"> <!-- Hidden input for comment ID -->
+                                        <button type="submit" name="delete" class="action-btn">🗑️ Delete</button>
+                                    </form>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <form method="post" action="comment.php">
+                            <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>"> <!-- Hidden input for post ID -->
+                            <textarea name="content" placeholder="Write a comment..." required></textarea> <!-- Comment content textarea -->
+                            <button type="submit" class="action-btn">Comment</button> <!-- Submit button -->
+                        </form>
                     </div>
                 </div>
             <?php endforeach; ?>

@@ -84,6 +84,7 @@ try {
         <ul class="menu">
             <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
         <button class="btn">Tweet</button>
