@@ -1,34 +1,80 @@
 <?php
-require_once "db.php"; // Include the database connection file
-session_start(); // Start the session
+require_once "db.php";
+session_start();
 
-if (!isset($_SESSION['user_id'])) { // Check if the user is logged in
-    header("Location: login.php"); // Redirect to login page if not logged in
-    exit(); // Exit the script
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { // Check if the request method is POST
-    $post_id = $_POST['post_id']; // Get the post ID from the form
-    $user_id = $_SESSION['user_id']; // Get the user ID from the session
+// Check if user has admin role for certain operations
+function isAdmin($conn, $user_id) {
+    static $isAdminCache = [];
+    if (!isset($isAdminCache[$user_id])) {
+        $stmt = $conn->prepare('SELECT role FROM users WHERE user_id = ?');
+        $stmt->execute([$user_id]);
+        $user = $stmt->fetch();
+        $isAdminCache[$user_id] = ($user && $user['role'] === 'admin');
+    }
+    return $isAdminCache[$user_id];
+}
 
-    try {
-        $stmt = $conn->prepare("SELECT * FROM posts WHERE post_id = :post_id AND user_id = :user_id"); // Prepare the SQL statement to select the post
-        $stmt->bindParam(':post_id', $post_id); // Bind the post ID parameter
-        $stmt->bindParam(':user_id', $user_id); // Bind the user ID parameter
-        $stmt->execute(); // Execute the query
-        $post = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the post data
+// Validate request
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+    header("Location: index.php");
+    exit();
+}
 
-        if ($post) { // If the post belongs to the user
-            $stmt = $conn->prepare("DELETE FROM posts WHERE post_id = :post_id AND user_id = :user_id"); // Prepare the SQL statement to delete the post
-            $stmt->bindParam(':post_id', $post_id); // Bind the post ID parameter
-            $stmt->bindParam(':user_id', $user_id); // Bind the user ID parameter
-            $stmt->execute(); // Execute the delete query
-        }
-    } catch (PDOException $e) { // Catch any PDO exceptions
-        echo "Database error: " . $e->getMessage(); // Display the database error message
+$type = $_GET['type'] ?? '';
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'index.php';
+
+if ($id <= 0 || !in_array($type, ['post', 'comment', 'user'])) {
+    header("Location: index.php");
+    exit();
+}
+
+try {
+    $conn->beginTransaction();
+    $isUserAdmin = isAdmin($conn, $_SESSION['user_id']);
+
+    switch($type) {
+        case 'post':
+            $stmt = $conn->prepare("SELECT user_id FROM posts WHERE post_id = ?");
+            $stmt->execute([$id]);
+            $post = $stmt->fetch();
+            
+            if ($post && ($post['user_id'] == $_SESSION['user_id'] || $isUserAdmin)) {
+                // Using cascading deletes for associated records
+                $conn->prepare("DELETE FROM posts WHERE post_id = ?")->execute([$id]);
+            }
+            break;
+
+        case 'comment':
+            $stmt = $conn->prepare("SELECT user_id FROM comments WHERE comment_id = ?");
+            $stmt->execute([$id]);
+            $comment = $stmt->fetch();
+            
+            if ($comment && ($comment['user_id'] == $_SESSION['user_id'] || $isUserAdmin)) {
+                $conn->prepare("DELETE FROM comments WHERE comment_id = ?")->execute([$id]);
+            }
+            break;
+
+        case 'user':
+            if ($isUserAdmin && $id != $_SESSION['user_id']) {
+                // Using cascading deletes for associated records
+                $conn->prepare("DELETE FROM users WHERE user_id = ?")->execute([$id]);
+                $redirect = 'admin_panel.php';
+            }
+            break;
     }
 
-    header("Location: index.php"); // Redirect to the index page
-    exit(); // Exit the script
+    $conn->commit();
+} catch (PDOException $e) {
+    $conn->rollBack();
+    error_log("Delete error: " . $e->getMessage());
 }
-?>
+
+header("Location: $redirect");
+exit();
+
