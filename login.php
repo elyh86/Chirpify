@@ -33,16 +33,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chirpyfy</title>
+    <title>Chirpyfy - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container" id="authContainer">
+<div id="authContainer">
     <div class="login-box">
         <div class="twitter-icon">
             <i class="fab fa-twitter"></i>
         </div>
-        <h2>Log in op Chirpify</h2>
+        <h2>Log in op Chirpyfy</h2>
         <?php if ($error_message): ?>
             <div class="error-message">
                 <?php echo htmlspecialchars($error_message); ?>

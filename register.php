@@ -45,23 +45,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chirpyfy</title>
+    <title>Chirpyfy - Register</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container" id="authContainer">
+<div id="authContainer">
     <div class="register-box">
         <div class="twitter-icon">
             <i class="fab fa-twitter"></i>
         </div>
-        <h2>Registreer je op Chirpify</h2>
-        
+        <h2>Registreer je op Chirpyfy</h2>
         <?php if ($error_message): ?>
             <div class="error-message">
                 <?php echo htmlspecialchars($error_message); ?>
             </div>
         <?php endif; ?>
-
         <form method="post" action="">
             <div class="form-field">
                 <input type="text" 
@@ -70,7 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="Gebruikersnaam"
                        required>
             </div>
-            
             <div class="form-field">
                 <input type="email" 
                        id="registerEmail" 
@@ -78,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="E-mail"
                        required>
             </div>
-            
             <div class="form-field">
                 <input type="password" 
                        id="registerPass" 
@@ -86,7 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="Wachtwoord"
                        required>
             </div>
-            
             <div class="form-field">
                 <input type="password" 
                        id="confirmPass" 
@@ -94,10 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="Bevestig wachtwoord"
                        required>
             </div>
-            
             <button type="submit">Registreren</button>
         </form>
-
         <p>Al een account? <a href="login.php">Log in</a></p>
     </div>
 </div>

@@ -6,6 +6,8 @@
     --border: #eff3f4;
     --error: #dc2626;
     --success: #059669;
+    --hover-bg: rgba(29, 155, 240, 0.1);
+    --shadow: rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -20,8 +22,6 @@ body {
     line-height: 1.5;
     background: var(--bg);
     color: var(--text);
-    margin: 0;
-    padding: 0;
 }
 
 .container {
@@ -41,6 +41,7 @@ body {
     overflow-y: auto;
     background: #ffffff;
     border-right: 1px solid var(--border);
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
 .sidebar .logo {
@@ -71,7 +72,7 @@ body {
 }
 
 .sidebar .menu a:hover {
-    background: rgba(29, 155, 240, 0.1);
+    background: var(--hover-bg);
     color: var(--primary);
 }
 
@@ -94,7 +95,7 @@ body {
 }
 
 .sidebar .btn:hover {
-    background: darken(var(--primary), 10%);
+    background: #117dc0;
 }
 
 /* Main Content */
@@ -105,12 +106,16 @@ body {
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
     background: #ffffff;
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
 .main-content .header {
     border-bottom: 1px solid var(--border);
     padding-bottom: 10px;
     margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text);
 }
 
 .main-content .new-post textarea {
@@ -120,6 +125,8 @@ body {
     border-radius: 8px;
     font-size: 16px;
     margin-bottom: 10px;
+    resize: none;
+    background: var(--bg);
 }
 
 .main-content .new-post button {
@@ -134,7 +141,7 @@ body {
 }
 
 .main-content .new-post button:hover {
-    background: darken(var(--primary), 10%);
+    background: #117dc0;
 }
 
 /* Posts */
@@ -149,6 +156,8 @@ body {
     flex-direction: column;
     gap: 12px;
     background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow);
 }
 
 .post-header {
@@ -211,6 +220,15 @@ body {
     color: var(--primary);
 }
 
+.post-image, .comment-image {
+    max-width: 100%;
+    max-height: 300px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
 /* Comments */
 .comments {
     margin-top: 10px;
@@ -262,11 +280,12 @@ body {
     border-radius: 4px;
     font-size: 14px;
     margin-bottom: 5px;
+    resize: none;
 }
 
 .comments button {
     background: var(--primary);
-    color: #fff;
+    color: white;
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
@@ -275,7 +294,7 @@ body {
 }
 
 .comments button:hover {
-    background: darken(var(--primary), 10%);
+    background: #117dc0;
 }
 
 /* Profile Info */
@@ -308,17 +327,18 @@ body {
 }
 
 /* Utilities */
-.error { color: var(--error); }
-.success { color: var(--success); }
-
 .error-message {
     color: var(--error);
     margin-bottom: 20px;
+    font-size: 14px;
+    text-align: left;
 }
 
 .success-message {
     color: var(--success);
     margin-bottom: 20px;
+    font-size: 14px;
+    text-align: left;
 }
 
 a {
@@ -328,4 +348,101 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* Authentication Pages */
+#authContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: var(--primary);
+    padding: 20px;
+}
+
+.login-box, .register-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px var(--shadow);
+    text-align: center;
+    border: 2px solid var(--border);
+}
+
+.twitter-icon {
+    font-size: 50px;
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--text);
+    font-weight: bold;
+}
+
+.form-field {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    font-size: 16px;
+    color: var(--text);
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #117dc0;
+}
+
+p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--gray);
+}
+
+p a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: var(--error);
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.success-message {
+    color: var(--success);
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: left;
 }

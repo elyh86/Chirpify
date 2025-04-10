@@ -19,6 +19,12 @@ try {
         $conn->exec("ALTER TABLE posts ADD COLUMN repost_count INT DEFAULT 0;");
     }
 
+    // Check if 'image' column exists in 'posts', and add it if it doesn't
+    $result = $conn->query("SHOW COLUMNS FROM posts LIKE 'image'");
+    if ($result->rowCount() == 0) {
+        $conn->exec("ALTER TABLE posts ADD COLUMN image VARCHAR(255) DEFAULT NULL;");
+    }
+
     // Check if 'comments' table exists, and create it if it doesn't
     $result = $conn->query("SHOW TABLES LIKE 'comments'");
     if ($result->rowCount() == 0) {
@@ -33,6 +39,12 @@ try {
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
             );
         ");
+    }
+
+    // Check if 'image' column exists in 'comments', and add it if it doesn't
+    $result = $conn->query("SHOW COLUMNS FROM comments LIKE 'image'");
+    if ($result->rowCount() == 0) {
+        $conn->exec("ALTER TABLE comments ADD COLUMN image VARCHAR(255) DEFAULT NULL;");
     }
 } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();

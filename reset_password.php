@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container" id="authContainer">
+<div id="authContainer">
     <div class="login-box">
         <div class="twitter-icon">
             <i class="fab fa-twitter"></i>
