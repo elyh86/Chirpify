@@ -1,5 +1,6 @@
 <?php
 require_once "db.php";
+
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -60,17 +61,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
             }
 
+            // Handle profile picture upload
             if ($profile_picture['size'] > 0) {
                 if ($profile_picture['size'] <= 2 * 1024 * 1024) { // Limit image size to 2MB
                     $target_dir = "uploads/";
                     if (!is_dir($target_dir)) {
                         mkdir($target_dir, 0777, true);
                     }
-                    $filename = time() . '_' . basename($profile_picture["name"]);
+                    $filename = 'avatar_' . time() . '_' . basename($profile_picture["name"]);
                     $target_file = $target_dir . $filename;
                     if (move_uploaded_file($profile_picture["tmp_name"], $target_file)) {
                         $stmt = $conn->prepare("UPDATE users SET profile_picture = :profile_picture WHERE user_id = :user_id");
-                        $stmt->bindParam(':profile_picture', $filename);
+                        $stmt->bindParam(':profile_picture', $target_file);
                         $stmt->bindParam(':user_id', $user_id);
                         $stmt->execute();
                     } else {
@@ -80,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $error_message = "Profile picture size must be less than 2MB.";
                 }
             }
+
 
             $success_message = "Profile updated successfully";
         } catch (PDOException $e) {
@@ -97,6 +100,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Edit Profile - Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+
+        .register-box button[type="submit"] {
+            background-color: white !important;
+            color: #1d9bf0 !important;
+            font-weight: bold;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .register-box button[type="submit"]:hover {
+            background-color: #f5f5f5 !important;
+        }
+
+        .register-box a {
+            color: white !important;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-box a:hover {
+            text-decoration: underline;
+        }
+
+        .custom-file-upload {
+            background-color: white !important;
+            color: #1d9bf0 !important;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #f5f5f5 !important;
+        }
+    </style>
 </head>
 <body>
 <div class="container" id="authContainer">
@@ -161,7 +209,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="profile_picture" class="custom-file-upload">Choose Profile Picture</label>
                 <input type="file" 
                        id="profile_picture" 
-                       name="profile_picture">
+                       name="profile_picture"
+                       accept="image/*">
+                <?php if (!empty($user['profile_picture'])): ?>
+                    <div class="current-image">
+                        <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Current Profile Picture" style="max-width: 100px; border-radius: 50%;">
+                    </div>
+                <?php endif; ?>
             </div>
             
             <button type="submit">Update Profile</button>

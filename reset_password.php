@@ -1,5 +1,6 @@
 <?php
 require_once "db.php";
+
 session_start();
 
 $error_message = "";
@@ -44,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chirpyfy - Reset Password</title>
     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
 <div id="authContainer">

@@ -1,5 +1,6 @@
 <?php
 require_once "db.php";
+
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -19,7 +20,7 @@ try {
     }
 
     if (!isset($user['profile_picture']) || empty($user['profile_picture'])) {
-        $user['profile_picture'] = 'default_avatar.png';
+        $user['profile_picture'] = 'uploads/default_avatar.png';
     }
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();
@@ -94,6 +95,7 @@ try {
     <title>Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 <body>
 <div class="container">
@@ -114,7 +116,7 @@ try {
     </div>
     <div class="main-content">
         <div class="header">
-            <h1>Home</h1>
+            <h1>Home asd</h1>
         </div>
         <div class="new-post">
             <form method="post" action="" enctype="multipart/form-data">
@@ -131,7 +133,7 @@ try {
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <div class="post-header">
-                        <img src="<?php echo htmlspecialchars($post['profile_picture']); ?>" alt="Avatar" class="avatar">
+                        <img src="<?php echo htmlspecialchars(file_exists($post['profile_picture']) ? $post['profile_picture'] : 'uploads/default_avatar.png'); ?>" alt="Avatar" class="avatar">
                         <div>
                             <p><strong><a href="profile.php?user_id=<?php echo $post['user_id']; ?>"><?php echo htmlspecialchars($post['username']); ?></a></strong></p>
                             <p><small><?php echo $post['created_at']; ?></small></p>
@@ -173,10 +175,11 @@ try {
                             </button>
                         </form>
                         <?php if ($post['user_id'] == $_SESSION['user_id']): ?>
-                            <form method="post" action="delete.php" style="display: inline;">
-                                <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                                <button type="submit" name="delete" class="action-btn">🗑️ Delete</button>
-                            </form>
+                            <a href="delete.php?type=post&id=<?php echo $post['post_id']; ?>" style="text-decoration: none;">
+                                <button style="background-color: #1d9bf0; border: none; cursor: pointer;">
+                                    🗑️ Delete
+                                </button>
+                            </a>
                         <?php endif; ?>
                     </div>
                     <div class="comments">

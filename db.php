@@ -70,6 +70,12 @@ try {
     if (!columnExists($conn, 'users', 'profile_picture')) {
         $conn->exec("ALTER TABLE users ADD COLUMN profile_picture VARCHAR(255) DEFAULT 'default_avatar.png'");
     }
+
+    // Add biography column to users table
+    if (!columnExists($conn, 'users', 'biography')) {
+        $conn->exec("ALTER TABLE users ADD COLUMN biography TEXT");
+    }
+
     
     // Set admin role for user_id 5 if it exists
     $stmt = $conn->prepare("SELECT user_id FROM users WHERE user_id = 5");

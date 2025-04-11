@@ -1,5 +1,6 @@
 <?php
 require_once "db.php";
+
 session_start();
 
 if (!isset($_GET['user_id'])) {
@@ -27,7 +28,7 @@ try {
         $user['biography'] = '';
     }
     if (!isset($user['profile_picture']) || empty($user['profile_picture'])) {
-        $user['profile_picture'] = 'default_avatar.png'; // Default avatar image
+        $user['profile_picture'] = 'uploads/default_avatar.png'; // Default avatar image
     }
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();
@@ -74,6 +75,7 @@ try {
     <title><?php echo htmlspecialchars($user['username']); ?>'s Profile - Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 <body>
 <div class="container">
@@ -97,7 +99,7 @@ try {
             <?php endif; ?>
         </div>
         <div class="profile-info">
-            <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Avatar" class="avatar">
+            <img src="<?php echo htmlspecialchars(file_exists($user['profile_picture']) ? $user['profile_picture'] : 'uploads/default_avatar.png'); ?>" alt="Avatar" class="avatar">
             <h2><?php echo htmlspecialchars($user['username']); ?></h2>
             <p><?php echo htmlspecialchars($user['email']); ?></p>
             <p><?php echo htmlspecialchars($user['biography']); ?></p>
@@ -125,7 +127,7 @@ try {
                         ?>
                         <form method="post" action="like.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" style="border: none; background: none; cursor: pointer;">
+                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>"style="background-color: #1d9bf0; border: none; cursor: pointer;"">
                                 <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
                             </button>
                         </form>
@@ -140,17 +142,16 @@ try {
                         ?>
                         <form method="post" action="repost.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" style="border: none; background: none; cursor: pointer;">
+                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>"style="background-color: #1d9bf0; border: none; cursor: pointer;"">
                                 <i class="fas fa-retweet"></i> <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
                             </button>
                         </form>
                         <?php if ($post['user_id'] == $_SESSION['user_id']): ?>
-                            <form method="post" action="delete.php" style="display: inline;">
-                                <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                                <button type="submit" name="delete" style="border: none; background: none; cursor: pointer;">
+                            <a href="delete.php?type=post&id=<?php echo $post['post_id']; ?>" style="text-decoration: none;">
+                                <button style="background-color: #1d9bf0; border: none; cursor: pointer;">
                                     <i class="fas fa-trash"></i> 🗑️ Delete
                                 </button>
-                            </form>
+                            </a>
                         <?php endif; ?>
                     </div>
                 </div>

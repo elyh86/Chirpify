@@ -1,4 +1,5 @@
 <?php
+require_once "db.php";
 session_start();
 ?>
 
@@ -10,6 +11,7 @@ session_start();
     <title>About Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 <body>
 <div class="container">
