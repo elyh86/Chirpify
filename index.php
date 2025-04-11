@@ -112,22 +112,23 @@ try {
             <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
-        <button class="btn">Tweet</button>
+        <a href="index.php" class="btn">Tweet</a>
     </div>
     <div class="main-content">
         <div class="header">
-            <h1>Home asd</h1>
+            <h1>Home</h1>
         </div>
         <div class="new-post">
             <form method="post" action="" enctype="multipart/form-data">
                 <textarea name="content" placeholder="What's happening?" required></textarea>
-                <label for="image" class="custom-file-upload">Add a Picture</label>
-                <input type="file" id="image" name="image" accept="image/*">
-                <button type="submit" name="new_post" style="margin-left: 10px;">Chirp</button>
+                <div class="post-actions">
+                    <label for="image" class="custom-file-upload">
+                        <i class="fas fa-image"></i> Add Image
+                    </label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                    <button type="submit" name="new_post">Chirp</button>
+                </div>
             </form>
-            <?php if (isset($error_message)): ?>
-                <p class="error"><?php echo $error_message; ?></p>
-            <?php endif; ?>
         </div>
         <div class="posts">
             <?php foreach ($posts as $post): ?>

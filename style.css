@@ -82,6 +82,16 @@ body {
     margin-right: 10px;
 }
 
+.sidebar .menu .admin-link {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.sidebar .menu .admin-link:hover {
+    background: var(--hover-bg);
+    color: var(--primary);
+}
+
 .sidebar .btn {
     background: var(--primary);
     color: white;
@@ -94,10 +104,13 @@ body {
     text-align: center;
     margin-top: 20px;
     transition: background 0.3s;
+    text-decoration: none;
+    display: block;
 }
 
 .sidebar .btn:hover {
     background: #117dc0;
+    text-decoration: none;
 }
 
 /* Main Content */
@@ -155,8 +168,8 @@ body {
     background: var(--card-bg);
     border-radius: 16px;
     border: 1px solid var(--border);
-    padding: 16px;
-    margin-bottom: 20px;
+    padding: 20px;
+    margin-bottom: 15px;
     transition: all 0.2s ease;
 }
 
@@ -219,53 +232,106 @@ body {
     margin: 12px 0;
 }
 
+/* Post Actions Styling */
 .post-actions {
     display: flex;
-    justify-content: space-between;
-    max-width: 425px;
-    margin-top: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
 }
 
-.post-actions button {
-    background: transparent;
-    color: var(--gray);
-    padding: 8px 12px;
+.post-actions button, 
+.action-btn {
+    background-color: white;
+    color: var(--text);
+    padding: 8px 16px;
     border-radius: 9999px;
-    border: none;
+    border: 1px solid var(--border);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
-    margin-right: 8px;
+    min-width: 100px;
+    justify-content: center;
 }
 
-.post-actions button:hover {
-    color: var(--primary);
-    background-color: var(--hover-bg);
+/* Like Button Style */
+.action-btn[name="like"],
+.action-btn[name="unlike"] {
+    color: #e0245e;
+    border-color: #e0245e30;
+    font-weight: 600;
 }
 
-.post-actions button i {
-    font-size: 18px;
+.action-btn[name="like"]:hover,
+.action-btn[name="unlike"]:hover {
+    background-color: #e0245e15;
+    color: #e0245e;
+    border-color: #e0245e;
 }
 
-.post-actions button.delete {
+/* Repost Button Style */
+.action-btn[name="repost"],
+.action-btn[name="unrepost"] {
+    color: var(--success);
+    border-color: var(--success);
+    font-weight: 600;
+}
+
+.action-btn[name="repost"]:hover,
+.action-btn[name="unrepost"]:hover {
+    background-color: rgba(5, 150, 105, 0.1);
+    color: var(--success);
+    border-color: var(--success);
+}
+
+/* Delete Button Style */
+.action-btn[name="delete"] {
     color: var(--error);
+    border-color: var(--error);
+    font-weight: 600;
 }
 
-.post-actions button.delete:hover {
-    color: #b91c1c;
+.action-btn[name="delete"]:hover {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: var(--error);
+    border-color: var(--error);
+}
+
+/* Comment Button Style */
+.action-btn:not([name="like"]):not([name="unlike"]):not([name="repost"]):not([name="unrepost"]):not([name="delete"]) {
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+.action-btn:not([name="like"]):not([name="unlike"]):not([name="repost"]):not([name="unrepost"]):not([name="delete"]):hover {
+    background-color: var(--hover-bg);
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 /* New Post Form */
 .new-post {
     background: var(--card-bg);
     padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px var(--shadow);
     margin-bottom: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.new-post form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
 }
 
 .new-post textarea {
@@ -274,11 +340,12 @@ body {
     border: 1px solid var(--border);
     border-radius: 12px;
     font-size: 15px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     resize: none;
     background: var(--card-bg);
     color: var(--text);
     transition: all 0.3s ease;
+    min-height: 100px;
 }
 
 .new-post textarea:focus {
@@ -301,6 +368,24 @@ body {
 .new-post button:hover {
     background: var(--primary-hover);
     transform: translateY(-1px);
+}
+
+.new-post button[type="submit"] {
+    background: var(--primary);
+    color: white;
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    min-width: 120px;
+}
+
+.new-post .custom-file-upload {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 10px 24px;
+    font-size: 15px;
+    min-width: 120px;
 }
 
 /* Profile Page */
@@ -362,8 +447,8 @@ body {
 
 /* Comments */
 .comments {
-    margin-top: 10px;
-    padding: 10px;
+    margin-top: 15px;
+    padding: 15px;
     background: #f9f9f9;
     border-radius: 8px;
 }
@@ -378,7 +463,8 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
 }
 
 .comment img.avatar {
@@ -415,17 +501,25 @@ body {
 }
 
 .comments button {
-    background: var(--primary);
-    color: white;
-    border: none;
+    background: transparent;
+    color: var(--gray);
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 9999px;
+    border: 1px solid var(--border);
     font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    margin: 0 5px;
 }
 
 .comments button:hover {
-    background: #117dc0;
+    background-color: var(--hover-bg);
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 /* Profile Page Styles */
@@ -692,16 +786,16 @@ input[type="file"] {
 
 .custom-file-upload {
     display: inline-block;
-    padding: 10px 20px;
-    background: var(--primary);
+    padding: 8px 16px;
+    background: transparent;
     color: #fff;
     border-radius: 9999px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
     transition: background 0.3s;
-    margin-bottom: 10px; /* Add margin to separate it from other elements */
+    margin-right: 10px;
 }
 
 .custom-file-upload:hover {
@@ -710,4 +804,188 @@ input[type="file"] {
 
 .custom-file-upload:active {
     background: #0f6ca8;
+}
+
+/* Improved Button Styling */
+.action-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    min-width: auto;
+    margin: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Primary Button Style */
+.btn-primary,
+button[type="submit"],
+.new-post button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover,
+.new-post button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Delete Button Style */
+.action-btn[name="delete"],
+button[name="delete"] {
+    color: var(--error);
+}
+
+.action-btn[name="delete"]:hover,
+button[name="delete"]:hover {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: var(--error);
+    border-color: var(--error);
+}
+
+/* Like Button Style */
+.action-btn[name="like"],
+.action-btn[name="unlike"] {
+    color: var(--primary);
+}
+
+/* Repost Button Style */
+.action-btn[name="repost"],
+.action-btn[name="unrepost"] {
+    color: var(--success);
+}
+
+/* Edit Profile Styling */
+.register-box {
+    position: relative;
+    max-width: 600px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 32px;
+}
+
+.register-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.register-box .form-field {
+    position: relative;
+}
+
+.register-box label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.register-box textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.register-box textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.register-box input[type="text"],
+.register-box input[type="email"],
+.register-box input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.register-box input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.register-box .custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.register-box .custom-file-upload:hover {
+    background-color: var(--hover-bg);
+    transform: translateY(-1px);
+}
+
+.register-box .current-image {
+    margin: 16px 0;
+    text-align: center;
+}
+
+.register-box .current-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.register-box button[type="submit"] {
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+}
+
+.register-box button[type="submit"]:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.register-box .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-box .back-link:hover {
+    text-decoration: underline;
 }
