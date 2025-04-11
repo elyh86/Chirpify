@@ -75,7 +75,6 @@ try {
     <title><?php echo htmlspecialchars($user['username']); ?>'s Profile - Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 </head>
 <body>
 <div class="container">
@@ -86,6 +85,9 @@ try {
         <ul class="menu">
             <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+            <?php if (isset($user['is_admin']) && $user['is_admin'] == 1): ?>
+                <li><a href="admin_panel.php"><i class="fas fa-cog"></i> Admin Panel</a></li>
+            <?php endif; ?>
             <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
@@ -127,7 +129,7 @@ try {
                         ?>
                         <form method="post" action="like.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>"style="background-color: #1d9bf0; border: none; cursor: pointer;"">
+                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" style="background-color: #1d9bf0; border: none; cursor: pointer;">
                                 <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
                             </button>
                         </form>
@@ -142,7 +144,7 @@ try {
                         ?>
                         <form method="post" action="repost.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>"style="background-color: #1d9bf0; border: none; cursor: pointer;"">
+                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" style="background-color: #1d9bf0; border: none; cursor: pointer;">
                                 <i class="fas fa-retweet"></i> <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
                             </button>
                         </form>

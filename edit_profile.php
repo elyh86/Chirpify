@@ -102,6 +102,114 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1d9bf0;
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 2px solid #e1e8ed;
+        }
+
+        .twitter-icon {
+            font-size: 50px;
+            color: #1d9bf0;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #0f1419;
+        }
+
+        .form-field {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            background: #ffffff;
+            font-size: 16px;
+            color: #0f1419;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1d9bf0;
+            color: white;
+            border-radius: 9999px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .custom-file-upload:hover {
+            background: #117dc0;
+        }
+
+        .current-image {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .current-image img {
+            max-width: 100px;
+            border-radius: 50%;
+            border: 2px solid #e1e8ed;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: #1d9bf0;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background: #117dc0;
+        }
+
+        .error-message {
+            color: #dc2626;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .success-message {
+            color: #059669;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
 
         .register-box button[type="submit"] {
             background-color: white !important;
@@ -112,8 +220,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 9999px;
             cursor: pointer;
             transition: background-color 0.2s;
-            width: 100%;
-            margin-top: 20px;
         }
 
         .register-box button[type="submit"]:hover {
@@ -146,7 +252,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-<body>
+<body style="
+    background-color: #1d9bf0;
+">
 <div class="container" id="authContainer">
     <div class="register-box">
         <div class="twitter-icon">
@@ -167,6 +275,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Edit Profile</h2>
         <form method="post" action="" enctype="multipart/form-data">
             <div class="form-field">
+                <label for="username">Username</label>
                 <input type="text" 
                        id="username" 
                        name="username" 
@@ -176,6 +285,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             
             <div class="form-field">
+                <label for="email">Email</label>
                 <input type="email" 
                        id="email" 
                        name="email" 
@@ -185,6 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="form-field">
+                <label for="biography">Biography</label>
                 <textarea id="biography" 
                           name="biography" 
                           placeholder="Biography"
@@ -192,13 +303,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             
             <div class="form-field">
+                <label for="password">New Password (leave blank to keep current)</label>
                 <input type="password" 
                        id="password" 
                        name="password" 
-                       placeholder="New Password (leave blank to keep current)">
+                       placeholder="New Password">
             </div>
             
             <div class="form-field">
+                <label for="confirm_password">Confirm Password</label>
                 <input type="password" 
                        id="confirm_password" 
                        name="confirm_password" 
@@ -206,6 +319,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="form-field">
+                <label for="profile_picture">Choose Profile Picture</label>
                 <label for="profile_picture" class="custom-file-upload">Choose Profile Picture</label>
                 <input type="file" 
                        id="profile_picture" 
@@ -221,7 +335,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Update Profile</button>
         </form>
 
-        <p><a href="profile.php?user_id=<?php echo $user_id; ?>">Back to Profile</a></p>
+        <p class="back-link">
+            <a href="profile.php?user_id=<?php echo $user_id; ?>">Back to Profile</a>
+        </p>
     </div>
 </div>
 </body>
