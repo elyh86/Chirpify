@@ -11,7 +11,6 @@ session_start();
     <title>About Chirpyfy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 </head>
 <body>
 <div class="container">
@@ -25,52 +24,70 @@ session_start();
             <?php if (isset($_SESSION['user_id']) && getUserRole($conn, $_SESSION['user_id']) === 'admin'): ?>
             <li><a href="admin_panel.php"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
             <?php endif; ?>
-            <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
-            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="about.php" class="active"><i class="fas fa-info-circle"></i> About</a></li>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <?php else: ?>
+                <li><a href="login.php"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <?php endif; ?>
         </ul>
     </div>
     <div class="main-content">
         <div class="header">
-            <h1>About Chirpyfy</h1>
+            <h1><i class="fab fa-twitter"></i> About Chirpyfy</h1>
         </div>
         <div class="about-content">
-            <p>Welcome to <strong>Chirpyfy</strong>, your go-to platform for sharing your thoughts, ideas, and updates with the world. Chirpyfy is a microblogging platform inspired by the simplicity and connectivity of social media platforms like Twitter.</p>
+            <div class="team-section">
+                <h3><i class="fas fa-users"></i> Welcome to Chirpyfy</h3>
+                <p>Your go-to platform for sharing thoughts, ideas, and connecting with others in real-time.</p>
+            </div>
+
+            <h2><i class="fas fa-question-circle"></i> What is Chirpyfy?</h2>
+            <p>Chirpyfy is a modern microblogging platform designed to make sharing and connecting easier than ever. Our platform provides a seamless experience for users to express themselves and engage with others.</p>
             
-            <h2>What is Chirpyfy?</h2>
-            <p>Chirpyfy allows users to:</p>
-            <ul>
-                <li>Post short updates (we call them "Chirps").</li>
-                <li>Like and repost Chirps from other users.</li>
-                <li>Comment on Chirps to engage in conversations.</li>
-                <li>Customize your profile with a biography and profile picture.</li>
-            </ul>
-
-            <h2>Why Choose Chirpyfy?</h2>
-            <p>Chirpyfy is designed to be simple, user-friendly, and focused on fostering meaningful interactions. Whether you're sharing your daily thoughts or engaging with others, Chirpyfy is the perfect platform to connect with like-minded individuals.</p>
-
             <div class="features">
-                <h3>Key Features:</h3>
+                <h3><i class="fas fa-star"></i> Key Features</h3>
                 <ul>
-                    <li><strong>Real-Time Updates:</strong> Share your thoughts instantly with your followers.</li>
-                    <li><strong>Engagement:</strong> Like, repost, and comment on Chirps to join the conversation.</li>
-                    <li><strong>Customizable Profiles:</strong> Add a biography and profile picture to express yourself.</li>
-                    <li><strong>Dark Mode:</strong> Switch to dark mode for a comfortable browsing experience.</li>
+                    <li><i class="fas fa-comment"></i> Post short updates (Chirps) to share your thoughts</li>
+                    <li><i class="fas fa-heart"></i> Like and interact with posts from other users</li>
+                    <li><i class="fas fa-retweet"></i> Repost interesting content to your followers</li>
+                    <li><i class="fas fa-user-circle"></i> Customize your profile with photos and bio</li>
+                    <li><i class="fas fa-comments"></i> Engage in conversations through comments</li>
                 </ul>
             </div>
 
-            <h2>Our Mission</h2>
-            <p>At Chirpyfy, our mission is to create a space where everyone can share their voice and connect with others. We believe in the power of communication and aim to make Chirpyfy a platform that fosters positivity and creativity.</p>
+            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+            <p>At Chirpyfy, we believe in the power of connecting people through meaningful conversations. Our mission is to create a vibrant community where everyone's voice can be heard and where ideas can flourish.</p>
 
-            <h2>Get Started</h2>
-            <p>If you haven't already, <a href="register.php">create an account</a> and start Chirping today! Already have an account? <a href="login.php">Log in</a> to join the conversation.</p>
-
-            <div class="team-section">
-                <h3>Meet the Team</h3>
-                <p>Chirpyfy was built by a passionate team of developers and designers who believe in the power of connection. We are constantly working to improve the platform and bring you the best experience possible.</p>
+            <div class="features">
+                <h3><i class="fas fa-shield-alt"></i> Why Choose Chirpyfy?</h3>
+                <ul>
+                    <li>User-friendly interface designed for seamless interaction</li>
+                    <li>Strong focus on community engagement and meaningful connections</li>
+                    <li>Robust privacy features to keep your data secure</li>
+                    <li>Regular updates and improvements based on user feedback</li>
+                </ul>
             </div>
 
-            <h2>Contact Us</h2>
-            <p>Have questions or feedback? We'd love to hear from you! Reach out to us at <a href="mailto:support@chirpyfy.com">support@chirpyfy.com</a>.</p>
+            <h2><i class="fas fa-rocket"></i> Getting Started</h2>
+            <p>Join our growing community today! It only takes a minute to create your account and start sharing your thoughts with the world.</p>
+            
+            <?php if (!isset($_SESSION['user_id'])): ?>
+            <p style="text-align: center; margin: 32px 0;">
+                <a href="register.php" class="btn-primary" style="margin-right: 16px;">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+                <a href="login.php" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </p>
+            <?php endif; ?>
+
+            <div class="team-section">
+                <h3><i class="fas fa-envelope"></i> Contact Us</h3>
+                <p>Have questions or suggestions? We'd love to hear from you!<br>
+                Email us at: <a href="mailto:support@chirpyfy.com" style="color: white; text-decoration: underline;">support@chirpyfy.com</a></p>
+            </div>
         </div>
     </div>
 </div>

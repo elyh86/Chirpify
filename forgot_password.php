@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Redirect to reset_password.php with the email as a query parameter
             header("Location: reset_password.php?email=" . urlencode($email));
             exit();
         } else {

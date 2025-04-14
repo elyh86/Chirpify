@@ -3,37 +3,32 @@ $dsn = 'mysql:host=localhost;dbname=chirpify';
 $username = 'root';
 $password = '';
 
-// Function to get user role
 function getUserRole($conn, $user_id) {
-    try {
+    static $isAdminCache = [];
+    if (!isset($isAdminCache[$user_id])) {
         $stmt = $conn->prepare("SELECT role FROM users WHERE user_id = :user_id");
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['role'] ?? 'user';
-    } catch (PDOException $e) {
-        error_log("Error getting user role: " . $e->getMessage());
-        return 'user';
     }
+    return $isAdminCache[$user_id];
 }
 
 try {
     $conn = new PDO($dsn, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    // Function to check if a column exists in a table
     function columnExists($conn, $table, $column) {
         $result = $conn->query("SHOW COLUMNS FROM {$table} LIKE '{$column}'");
         return $result->rowCount() > 0;
     }
 
-    // Function to check if a table exists
     function tableExists($conn, $table) {
         $result = $conn->query("SHOW TABLES LIKE '{$table}'");
         return $result->rowCount() > 0;
     }
 
-    // Add required columns to posts table
     if (!columnExists($conn, 'posts', 'like_count')) {
         $conn->exec("ALTER TABLE posts ADD COLUMN like_count INT DEFAULT 0");
     }
@@ -44,7 +39,6 @@ try {
         $conn->exec("ALTER TABLE posts ADD COLUMN image VARCHAR(255) DEFAULT NULL");
     }
 
-    // Create comments table if it doesn't exist
     if (!tableExists($conn, 'comments')) {
         $conn->exec("
             CREATE TABLE comments (
@@ -60,7 +54,6 @@ try {
         ");
     }
 
-    // Add required columns to users table
     if (!columnExists($conn, 'users', 'role')) {
         $conn->exec("ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user'");
     }
@@ -70,14 +63,10 @@ try {
     if (!columnExists($conn, 'users', 'profile_picture')) {
         $conn->exec("ALTER TABLE users ADD COLUMN profile_picture VARCHAR(255) DEFAULT 'default_avatar.png'");
     }
-
-    // Add biography column to users table
     if (!columnExists($conn, 'users', 'biography')) {
         $conn->exec("ALTER TABLE users ADD COLUMN biography TEXT");
     }
 
-    
-    // Set admin role for user_id 5 if it exists
     $stmt = $conn->prepare("SELECT user_id FROM users WHERE user_id = 5");
     $stmt->execute();
     if ($stmt->rowCount() > 0) {

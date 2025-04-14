@@ -10,6 +10,10 @@
     --shadow: rgba(0, 0, 0, 0.1);
     --card-bg: #ffffff;
     --primary-hover: #117dc0;
+    --hover-primary: #1a8cd8;
+    --hover-danger: #dc2626;
+    --hover-success: #059669;
+    --input-focus: rgba(29, 155, 240, 0.2);
 }
 
 * {
@@ -24,6 +28,8 @@ body {
     line-height: 1.5;
     background: var(--bg);
     color: var(--text);
+    min-height: 100vh;
+    background-color: #ffffff;
 }
 
 .container {
@@ -37,13 +43,14 @@ body {
 /* Sidebar */
 .sidebar {
     width: 275px;
-    padding: 20px;
+    padding: 24px;
     position: fixed;
-    height: 100%;
+    height: 100vh;
     overflow-y: auto;
-    background: #ffffff;
+    background: white;
     border-right: 1px solid var(--border);
-    box-shadow: 0 4px 8px var(--shadow);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 .sidebar .logo {
@@ -68,14 +75,16 @@ body {
     font-size: 18px;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 12px 16px;
     border-radius: 9999px;
-    transition: background 0.3s;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
 .sidebar .menu a:hover {
     background: var(--hover-bg);
     color: var(--primary);
+    transform: translateX(4px);
 }
 
 .sidebar .menu a i {
@@ -168,13 +177,15 @@ body {
     background: var(--card-bg);
     border-radius: 16px;
     border: 1px solid var(--border);
-    padding: 20px;
-    margin-bottom: 15px;
+    padding: 16px;
+    margin-bottom: 16px;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .post:hover {
-    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .post-header {
@@ -261,6 +272,20 @@ body {
     justify-content: center;
 }
 
+/* Improved Button Styling */
+.action-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    min-width: auto;
+    margin: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: var(--text);
+    background-color: white;
+}
+
 /* Like Button Style */
 .action-btn[name="like"],
 .action-btn[name="unlike"] {
@@ -296,6 +321,7 @@ body {
     color: var(--error);
     border-color: var(--error);
     font-weight: 600;
+    background-color: white;
 }
 
 .action-btn[name="delete"]:hover {
@@ -390,18 +416,21 @@ body {
 
 /* Profile Page */
 .profile-info {
-    background: var(--card-bg);
+    background: white;
     padding: 24px;
     border-radius: 16px;
     border: 1px solid var(--border);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .profile-info .avatar {
-    width: 120px;
-    height: 120px;
+    width: 128px;
+    height: 128px;
     border-radius: 50%;
-    border: 2px solid var(--card-bg);
+    border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
 }
 
@@ -443,14 +472,30 @@ body {
     .post-actions button {
         margin: 4px;
     }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 16px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 16px;
+    }
+
+    .post {
+        padding: 12px;
+    }
 }
 
 /* Comments */
 .comments {
-    margin-top: 15px;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 8px;
+    margin-top: 12px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 12px;
 }
 
 .comments h4 {
@@ -463,8 +508,11 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .comment img.avatar {
@@ -688,17 +736,17 @@ a:hover {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), #117dc0);
     padding: 20px;
 }
 
 .login-box, .register-box {
     width: 100%;
     max-width: 400px;
-    padding: 30px;
-    background: #ffffff;
+    padding: 32px;
+    background: white;
     border-radius: 16px;
-    box-shadow: 0 8px 16px var(--shadow);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     text-align: center;
     border: 2px solid var(--border);
 }
@@ -723,21 +771,29 @@ h2 {
 
 input[type="text"],
 input[type="password"],
-input[type="email"] {
+input[type="email"],
+textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border: 2px solid var(--border);
     border-radius: 8px;
-    background: var(--bg);
     font-size: 16px;
-    color: var(--text);
+    transition: all 0.2s ease;
+    background: white;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--input-focus);
+    outline: none;
 }
 
 button[type="submit"] {
     width: 100%;
     padding: 12px;
     background: var(--primary);
-    color: #fff;
+    color: white;
     border: none;
     border-radius: 9999px;
     font-size: 16px;
@@ -785,37 +841,29 @@ input[type="file"] {
 }
 
 .custom-file-upload {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 8px 16px;
-    background: transparent;
-    color: #fff;
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
     border-radius: 9999px;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
-    transition: background 0.3s;
+    transition: all 0.2s ease;
     margin-right: 10px;
 }
 
 .custom-file-upload:hover {
-    background: #117dc0;
+    background: var(--hover-bg);
+    transform: translateY(-1px);
 }
 
 .custom-file-upload:active {
     background: #0f6ca8;
-}
-
-/* Improved Button Styling */
-.action-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-    min-width: auto;
-    margin: 0 5px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
 }
 
 /* Primary Button Style */
@@ -839,31 +887,6 @@ button[type="submit"]:hover,
     background: var(--primary-hover);
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Delete Button Style */
-.action-btn[name="delete"],
-button[name="delete"] {
-    color: var(--error);
-}
-
-.action-btn[name="delete"]:hover,
-button[name="delete"]:hover {
-    background-color: rgba(220, 38, 38, 0.1);
-    color: var(--error);
-    border-color: var(--error);
-}
-
-/* Like Button Style */
-.action-btn[name="like"],
-.action-btn[name="unlike"] {
-    color: var(--primary);
-}
-
-/* Repost Button Style */
-.action-btn[name="repost"],
-.action-btn[name="unrepost"] {
-    color: var(--success);
 }
 
 /* Edit Profile Styling */
@@ -987,5 +1010,122 @@ button[name="delete"]:hover {
 }
 
 .register-box .back-link:hover {
+    text-decoration: underline;
+}
+
+/* Admin Panel Improvements */
+.admin-section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.admin-section th {
+    padding: 12px 16px;
+    background: var(--bg);
+    font-weight: 600;
+}
+
+.admin-section td {
+    padding: 12px 16px;
+    background: white;
+}
+
+/* About Page Styles */
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-content h2 {
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 32px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary);
+}
+
+.about-content h3 {
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+}
+
+.about-content p {
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.about-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 16px 0;
+}
+
+.about-content ul li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    color: var(--text);
+}
+
+.about-content ul li:before {
+    content: "✓";
+    color: var(--primary);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.features {
+    background: var(--bg);
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+}
+
+.team-section {
+    background: linear-gradient(135deg, var(--primary), #117dc0);
+    color: white;
+    padding: 32px;
+    border-radius: 12px;
+    margin: 32px 0;
+    text-align: center;
+}
+
+.team-section h3 {
+    color: white !important;
+    margin-top: 0 !important;
+}
+
+.team-section p {
+    color: white !important;
+    opacity: 0.9;
+}
+
+.about-content a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.about-content a:hover {
+    color: var(--primary-hover);
     text-decoration: underline;
 }
