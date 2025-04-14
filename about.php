@@ -24,6 +24,9 @@ session_start();
         <ul class="menu">
             <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id'] ?? ''; ?>"><i class="fas fa-user"></i> Profile</a></li>
+            <?php if (isset($_SESSION['user_id'])): ?>
+            <li><a href="edit_profile.php"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
+            <?php endif; ?>
             <?php if (isset($_SESSION['user_id']) && getUserRole($conn, $_SESSION['user_id']) === 'admin'): ?>
             <li><a href="admin_panel.php"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
             <?php endif; ?>

@@ -93,252 +93,153 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile - Chirpyfy</title>
+    <title>Edit Profile - Chirpify</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-    <style>
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #1d9bf0;
-        }
-
-        .register-box {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            border: 2px solid #e1e8ed;
-        }
-
-        .twitter-icon {
-            font-size: 50px;
-            color: #1d9bf0;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #0f1419;
-        }
-
-        .form-field {
-            width: 100%;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        input[type="email"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e1e8ed;
-            border-radius: 8px;
-            background: #ffffff;
-            font-size: 16px;
-            color: #0f1419;
-        }
-
-        .custom-file-upload {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #1d9bf0;
-            color: white;
-            border-radius: 9999px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            transition: background 0.3s;
-            margin-bottom: 10px;
-        }
-
-        .custom-file-upload:hover {
-            background: #117dc0;
-        }
-
-        .current-image {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .current-image img {
-            max-width: 100px;
-            border-radius: 50%;
-            border: 2px solid #e1e8ed;
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            background: #1d9bf0;
-            color: white;
-            border: none;
-            border-radius: 9999px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button[type="submit"]:hover {
-            background: #117dc0;
-        }
-
-        .error-message {
-            color: #dc2626;
-            margin-bottom: 20px;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .success-message {
-            color: #059669;
-            margin-bottom: 20px;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .register-box button[type="submit"] {
-            background-color: white !important;
-            color: #1d9bf0 !important;
-            font-weight: bold;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .register-box button[type="submit"]:hover {
-            background-color: #f5f5f5 !important;
-        }
-
-        .register-box a {
-            color: white !important;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .register-box a:hover {
-            text-decoration: underline;
-        }
-
-        .custom-file-upload {
-            background-color: white !important;
-            color: #1d9bf0 !important;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            cursor: pointer;
-            display: inline-block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .custom-file-upload:hover {
-            background-color: #f5f5f5 !important;
-        }
-    </style>
 </head>
-<body style="
-    background-color: #1d9bf0;
-">
-<div class="container" id="authContainer">
-    <div class="register-box">
-        <div class="twitter-icon">
-            <i class="fab fa-twitter"></i>
+<body>
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <ul class="menu">
+                <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="edit_profile.php"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
+                <?php if (getUserRole($conn, $_SESSION['user_id']) === 'admin'): ?>
+                <li><a href="admin_panel.php"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
+                <?php endif; ?>
+                <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+            <a href="index.php" class="btn">Tweet</a>
         </div>
-        <?php if ($error_message): ?>
-            <div class="error-message">
-                <?php echo htmlspecialchars($error_message); ?>
-            </div>
-        <?php endif; ?>
         
-        <?php if ($success_message): ?>
-            <div class="success-message">
-                <?php echo htmlspecialchars($success_message); ?>
-            </div>
-        <?php endif; ?>
+        <div class="main-content">
+            <div class="edit-profile-wrapper">
+                <div class="edit-profile-header">
+                    <h1>Edit Your Profile</h1>
+                    <p>Customize your profile information</p>
+                </div>
 
-        <h2>Edit Profile</h2>
-        <form method="post" action="" enctype="multipart/form-data">
-            <div class="form-field">
-                <label for="username">Username</label>
-                <input type="text" 
-                       id="username" 
-                       name="username" 
-                       placeholder="Username"
-                       value="<?php echo htmlspecialchars($user['username']); ?>"
-                       required>
-            </div>
-            
-            <div class="form-field">
-                <label for="email">Email</label>
-                <input type="email" 
-                       id="email" 
-                       name="email" 
-                       placeholder="Email"
-                       value="<?php echo htmlspecialchars($user['email']); ?>"
-                       required>
-            </div>
-
-            <div class="form-field">
-                <label for="biography">Biography</label>
-                <textarea id="biography" 
-                          name="biography" 
-                          placeholder="Biography"
-                          required><?php echo htmlspecialchars($user['biography']); ?></textarea>
-            </div>
-            
-            <div class="form-field">
-                <label for="password">New Password (leave blank to keep current)</label>
-                <input type="password" 
-                       id="password" 
-                       name="password" 
-                       placeholder="New Password">
-            </div>
-            
-            <div class="form-field">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" 
-                       id="confirm_password" 
-                       name="confirm_password" 
-                       placeholder="Confirm Password">
-            </div>
-
-            <div class="form-field">
-                <label for="profile_picture">Choose Profile Picture</label>
-                <label for="profile_picture" class="custom-file-upload">Choose Profile Picture</label>
-                <input type="file" 
-                       id="profile_picture" 
-                       name="profile_picture"
-                       accept="image/*">
-                <?php if (!empty($user['profile_picture'])): ?>
-                    <div class="current-image">
-                        <img src="<?php echo htmlspecialchars($user['profile_picture']); ?>" alt="Current Profile Picture" style="max-width: 100px; border-radius: 50%;">
+                <?php if ($error_message): ?>
+                    <div class="error-message">
+                        <?php echo htmlspecialchars($error_message); ?>
                     </div>
                 <?php endif; ?>
-            </div>
-            
-            <button type="submit">Update Profile</button>
-        </form>
+                
+                <?php if ($success_message): ?>
+                    <div class="success-message">
+                        <?php echo htmlspecialchars($success_message); ?>
+                    </div>
+                <?php endif; ?>
 
-        <p class="back-link">
-            <a href="profile.php?user_id=<?php echo $user_id; ?>">Back to Profile</a>
-        </p>
+                <form method="post" action="" enctype="multipart/form-data" class="edit-profile-form">
+                    <div class="media-upload-section">
+                        <div class="media-preview">
+                            <img src="<?php echo htmlspecialchars(!empty($user['profile_picture']) ? $user['profile_picture'] : 'uploads/default_avatar.png'); ?>" 
+                                 alt="Profile Preview">
+                        </div>
+                        <div class="upload-btn-wrapper">
+                            <label for="profile_picture" class="upload-btn">
+                                <i class="fas fa-camera"></i> Change Photo
+                            </label>
+                            <input type="file" 
+                                   id="profile_picture" 
+                                   name="profile_picture"
+                                   accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" 
+                               id="username" 
+                               name="username" 
+                               value="<?php echo htmlspecialchars($user['username']); ?>"
+                               required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" 
+                               id="email" 
+                               name="email" 
+                               value="<?php echo htmlspecialchars($user['email']); ?>"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="biography">Biography</label>
+                        <textarea id="biography" 
+                                  name="biography" 
+                                  rows="4"
+                                  placeholder="Tell us about yourself..."><?php echo htmlspecialchars($user['biography']); ?></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">New Password (leave blank to keep current)</label>
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               placeholder="New password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" 
+                               id="confirm_password" 
+                               name="confirm_password" 
+                               placeholder="Confirm new password">
+                    </div>
+
+                    <div class="form-footer">
+                        <a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>" class="cancel-btn">Cancel</a>
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+
+    <script>
+        // Preview image before upload
+        document.getElementById('profile_picture').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.querySelector('.media-preview img').src = e.target.result;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Dark mode functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+    </script>
 </body>
 </html>

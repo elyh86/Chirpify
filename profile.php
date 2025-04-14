@@ -99,6 +99,7 @@ try {
             <ul class="menu">
                 <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="edit_profile.php"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
                 <?php if (getUserRole($conn, $_SESSION['user_id']) === 'admin'): ?>
                 <li><a href="admin_panel.php" class="admin-link"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
                 <?php endif; ?>
@@ -108,18 +109,39 @@ try {
             <button class="btn">Tweet</button>
         </div>
         <div class="main-content">
-            <div class="header">
-                <h1 style="margin-bottom: 20px;"><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
-                <?php if ($user_id == $_SESSION['user_id']): ?>
-                    <a href="edit_profile.php" class="btn">Edit Profile</a>
-                <?php endif; ?>
+            <div class="profile-wrapper">
+                <div class="profile-cover"></div>
+                <div class="profile-avatar-wrapper">
+                    <img src="<?php echo htmlspecialchars(file_exists($user['profile_picture']) ? $user['profile_picture'] : 'uploads/default_avatar.png'); ?>" alt="Profile Picture" class="profile-avatar">
+                </div>
+                <div class="profile-content">
+                    <div class="profile-header">
+                        <div class="profile-info">
+                            <h1 class="profile-name"><?php echo htmlspecialchars($user['username']); ?></h1>
+                            <div class="profile-username">@<?php echo htmlspecialchars($user['username']); ?></div>
+                            <div class="profile-bio"><?php echo htmlspecialchars($user['biography']); ?></div>
+                            <div class="profile-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <?php echo date('F Y', strtotime($user['created_at'])); ?>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <?php echo htmlspecialchars($user['email']); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if ($user_id == $_SESSION['user_id']): ?>
+                            <div class="profile-actions">
+                                <a href="edit_profile.php" class="profile-action-btn action-primary">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-            <div class="profile-info">
-                <img src="<?php echo htmlspecialchars(file_exists($user['profile_picture']) ? $user['profile_picture'] : 'uploads/default_avatar.png'); ?>" alt="Avatar" class="avatar">
-                <h2><?php echo htmlspecialchars($user['username']); ?></h2>
-                <p><?php echo htmlspecialchars($user['email']); ?></p>
-                <p><?php echo htmlspecialchars($user['biography']); ?></p>
-            </div>
+
             <div class="posts">
                 <?php foreach ($posts as $post): ?>
                     <div class="post">
