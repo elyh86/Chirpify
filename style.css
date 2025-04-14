@@ -1,4 +1,5 @@
 :root {
+    /* Light mode variables */
     --primary: #1d9bf0;
     --bg: #f5f8fa;
     --text: #0f1419;
@@ -16,6 +17,24 @@
     --input-focus: rgba(29, 155, 240, 0.2);
 }
 
+[data-theme="dark"] {
+    --primary: #1d9bf0;
+    --bg: #15202b;
+    --text: #ffffff;
+    --gray: #8b98a5;
+    --border: #38444d;
+    --error: #ef4444;
+    --success: #10b981;
+    --hover-bg: rgba(29, 155, 240, 0.1);
+    --shadow: rgba(0, 0, 0, 0.3);
+    --card-bg: #192734;
+    --primary-hover: #1a8cd8;
+    --hover-primary: #1d9bf0;
+    --hover-danger: #ef4444;
+    --hover-success: #10b981;
+    --input-focus: rgba(29, 155, 240, 0.2);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -29,7 +48,7 @@ body {
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    background-color: #ffffff;
+    background-color: var(--bg);
 }
 
 .container {
@@ -47,7 +66,7 @@ body {
     position: fixed;
     height: 100vh;
     overflow-y: auto;
-    background: white;
+    background: var(--card-bg);
     border-right: 1px solid var(--border);
     box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -129,7 +148,7 @@ body {
     margin-left: 295px;
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
-    background: #ffffff;
+    background: var(--bg);
     box-shadow: 0 4px 8px var(--shadow);
 }
 
@@ -150,7 +169,8 @@ body {
     font-size: 16px;
     margin-bottom: 10px;
     resize: none;
-    background: var(--bg);
+    background: var(--card-bg);
+    color: var(--text);
 }
 
 .main-content .new-post button {
@@ -181,6 +201,7 @@ body {
     margin-bottom: 16px;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    color: var(--text);
 }
 
 .post:hover {
@@ -416,7 +437,7 @@ body {
 
 /* Profile Page */
 .profile-info {
-    background: white;
+    background: var(--card-bg);
     padding: 24px;
     border-radius: 16px;
     border: 1px solid var(--border);
@@ -429,7 +450,7 @@ body {
     width: 128px;
     height: 128px;
     border-radius: 50%;
-    border: 4px solid white;
+    border: 4px solid var(--card-bg);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
 }
@@ -510,9 +531,10 @@ body {
     gap: 10px;
     padding: 12px;
     margin-bottom: 8px;
-    background: white;
+    background: var(--card-bg);
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    color: var(--text);
 }
 
 .comment img.avatar {
@@ -546,6 +568,8 @@ body {
     font-size: 14px;
     margin-bottom: 5px;
     resize: none;
+    background: var(--card-bg);
+    color: var(--text);
 }
 
 .comments button {
@@ -573,7 +597,7 @@ body {
 /* Profile Page Styles */
 .main-content {
     padding: 0;
-    background: white;
+    background: var(--bg);
 }
 
 .profile-banner {
@@ -589,8 +613,8 @@ body {
     width: 133px;
     height: 133px;
     border-radius: 50%;
-    border: 4px solid white;
-    background: white;
+    border: 4px solid var(--card-bg);
+    background: var(--card-bg);
     object-fit: cover;
 }
 
@@ -598,7 +622,7 @@ body {
     position: absolute;
     top: 16px;
     right: 16px;
-    background: white;
+    background: var(--card-bg);
     color: var(--text);
     border: 1px solid var(--border);
     padding: 8px 16px;
@@ -744,7 +768,7 @@ a:hover {
     width: 100%;
     max-width: 400px;
     padding: 32px;
-    background: white;
+    background: var(--card-bg);
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -779,7 +803,8 @@ textarea {
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.2s ease;
-    background: white;
+    background: var(--card-bg);
+    color: var(--text);
 }
 
 input:focus,
@@ -845,7 +870,7 @@ input[type="file"] {
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background: white;
+    background: var(--card-bg);
     color: var(--primary);
     border: 2px solid var(--primary);
     border-radius: 9999px;
@@ -893,7 +918,7 @@ button[type="submit"]:hover,
 .register-box {
     position: relative;
     max-width: 600px;
-    background: white;
+    background: var(--card-bg);
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     padding: 32px;
@@ -926,6 +951,8 @@ button[type="submit"]:hover,
     font-size: 16px;
     resize: vertical;
     transition: border-color 0.2s;
+    background: var(--card-bg);
+    color: var(--text);
 }
 
 .register-box textarea:focus {
@@ -942,6 +969,8 @@ button[type="submit"]:hover,
     border-radius: 8px;
     font-size: 16px;
     transition: border-color 0.2s;
+    background: var(--card-bg);
+    color: var(--text);
 }
 
 .register-box input:focus {
@@ -952,7 +981,7 @@ button[type="submit"]:hover,
 .register-box .custom-file-upload {
     display: inline-block;
     padding: 10px 20px;
-    background-color: white;
+    background-color: var(--card-bg);
     color: var(--primary);
     border: 2px solid var(--primary);
     border-radius: 9999px;
@@ -978,7 +1007,7 @@ button[type="submit"]:hover,
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 3px solid white;
+    border: 3px solid var(--card-bg);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -1015,7 +1044,7 @@ button[type="submit"]:hover,
 
 /* Admin Panel Improvements */
 .admin-section {
-    background: white;
+    background: var(--card-bg);
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
@@ -1036,7 +1065,7 @@ button[type="submit"]:hover,
 
 .admin-section td {
     padding: 12px 16px;
-    background: white;
+    background: var(--card-bg);
 }
 
 /* About Page Styles */
@@ -1044,7 +1073,7 @@ button[type="submit"]:hover,
     max-width: 800px;
     margin: 0 auto;
     padding: 24px;
-    background: white;
+    background: var(--card-bg);
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
@@ -1128,4 +1157,30 @@ button[type="submit"]:hover,
 .about-content a:hover {
     color: var(--primary-hover);
     text-decoration: underline;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow);
+    z-index: 1000;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    background: var(--primary-hover);
 }

@@ -68,7 +68,7 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,89 +77,112 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-<div class="container">
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fab fa-twitter"></i>
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <ul class="menu">
+                <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
+                <?php if (getUserRole($conn, $_SESSION['user_id']) === 'admin'): ?>
+                <li><a href="admin_panel.php" class="admin-link"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
+                <?php endif; ?>
+                <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+            <button class="btn">Tweet</button>
         </div>
-        <ul class="menu">
-            <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="profile.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i> Profile</a></li>
-            <?php if (getUserRole($conn, $_SESSION['user_id']) === 'admin'): ?>
-            <li><a href="admin_panel.php" class="admin-link"><i class="fas fa-shield-alt"></i> Admin Panel</a></li>
-            <?php endif; ?>
-            <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
-            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
-        <button class="btn">Tweet</button>
-    </div>
-    <div class="main-content">
-        <div class="header">
-            <h1 style="margin-bottom: 20px;"><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
-            <?php if ($user_id == $_SESSION['user_id']): ?>
-                <a href="edit_profile.php" class="btn">Edit Profile</a>
-            <?php endif; ?>
-        </div>
-        <div class="profile-info">
-            <img src="<?php echo htmlspecialchars(file_exists($user['profile_picture']) ? $user['profile_picture'] : 'uploads/default_avatar.png'); ?>" alt="Avatar" class="avatar">
-            <h2><?php echo htmlspecialchars($user['username']); ?></h2>
-            <p><?php echo htmlspecialchars($user['email']); ?></p>
-            <p><?php echo htmlspecialchars($user['biography']); ?></p>
-        </div>
-        <div class="posts">
-            <?php foreach ($posts as $post): ?>
-                <div class="post">
-                    <div class="post-header">
-                        <img src="<?php echo htmlspecialchars($post['profile_picture']); ?>" alt="Avatar" class="avatar">
-                        <div>
-                            <p><strong><?php echo htmlspecialchars($post['username']); ?></strong></p>
-                            <p><small><?php echo $post['created_at']; ?></small></p>
+        <div class="main-content">
+            <div class="header">
+                <h1 style="margin-bottom: 20px;"><?php echo htmlspecialchars($user['username']); ?>'s Profile</h1>
+                <?php if ($user_id == $_SESSION['user_id']): ?>
+                    <a href="edit_profile.php" class="btn">Edit Profile</a>
+                <?php endif; ?>
+            </div>
+            <div class="profile-info">
+                <img src="<?php echo htmlspecialchars(file_exists($user['profile_picture']) ? $user['profile_picture'] : 'uploads/default_avatar.png'); ?>" alt="Avatar" class="avatar">
+                <h2><?php echo htmlspecialchars($user['username']); ?></h2>
+                <p><?php echo htmlspecialchars($user['email']); ?></p>
+                <p><?php echo htmlspecialchars($user['biography']); ?></p>
+            </div>
+            <div class="posts">
+                <?php foreach ($posts as $post): ?>
+                    <div class="post">
+                        <div class="post-header">
+                            <img src="<?php echo htmlspecialchars($post['profile_picture']); ?>" alt="Avatar" class="avatar">
+                            <div>
+                                <p><strong><?php echo htmlspecialchars($post['username']); ?></strong></p>
+                                <p><small><?php echo $post['created_at']; ?></small></p>
+                            </div>
+                        </div>
+                        <p><?php echo htmlspecialchars($post['content']); ?></p>
+                        <div class="post-actions">
+                            <?php
+                            $liked = false;
+                            foreach ($likes as $like) {
+                                if ($like['post_id'] == $post['post_id']) {
+                                    $liked = true;
+                                    break;
+                                }
+                            }
+                            ?>
+                            <form method="post" action="like.php" style="display: inline;">
+                                <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
+                                <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" style="background-color: #1d9bf0; border: none; cursor: pointer;">
+                                    <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
+                                </button>
+                            </form>
+                            <?php
+                            $reposted = false;
+                            foreach ($reposts as $repost) {
+                                if ($repost['post_id'] == $post['post_id']) {
+                                    $reposted = true;
+                                    break;
+                                }
+                            }
+                            ?>
+                            <form method="post" action="repost.php" style="display: inline;">
+                                <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
+                                <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" style="background-color: #1d9bf0; border: none; cursor: pointer;">
+                                    <i class="fas fa-retweet"></i> <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
+                                </button>
+                            </form>
+                            <?php if ($post['user_id'] == $_SESSION['user_id']): ?>
+                                <a href="delete.php?type=post&id=<?php echo $post['post_id']; ?>" style="text-decoration: none;">
+                                    <button style="background-color: #1d9bf0; border: none; cursor: pointer;">
+                                        <i class="fas fa-trash"></i> 🗑️ Delete
+                                    </button>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
-                    <p><?php echo htmlspecialchars($post['content']); ?></p>
-                    <div class="post-actions">
-                        <?php
-                        $liked = false;
-                        foreach ($likes as $like) {
-                            if ($like['post_id'] == $post['post_id']) {
-                                $liked = true;
-                                break;
-                            }
-                        }
-                        ?>
-                        <form method="post" action="like.php" style="display: inline;">
-                            <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" style="background-color: #1d9bf0; border: none; cursor: pointer;">
-                                <i class="fas fa-heart"></i> <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
-                            </button>
-                        </form>
-                        <?php
-                        $reposted = false;
-                        foreach ($reposts as $repost) {
-                            if ($repost['post_id'] == $post['post_id']) {
-                                $reposted = true;
-                                break;
-                            }
-                        }
-                        ?>
-                        <form method="post" action="repost.php" style="display: inline;">
-                            <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $reposted ? 'unrepost' : 'repost'; ?>" style="background-color: #1d9bf0; border: none; cursor: pointer;">
-                                <i class="fas fa-retweet"></i> <?php echo $reposted ? 'Unrepost' : 'Repost'; ?> (<?php echo $post['repost_count']; ?>)
-                            </button>
-                        </form>
-                        <?php if ($post['user_id'] == $_SESSION['user_id']): ?>
-                            <a href="delete.php?type=post&id=<?php echo $post['post_id']; ?>" style="text-decoration: none;">
-                                <button style="background-color: #1d9bf0; border: none; cursor: pointer;">
-                                    <i class="fas fa-trash"></i> 🗑️ Delete
-                                </button>
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
-</div>
+    <script>
+        // Dark mode functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+    </script>
 </body>
 </html>
