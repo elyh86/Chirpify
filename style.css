@@ -293,6 +293,28 @@ body {
     justify-content: center;
 }
 
+.post-actions button[title] {
+    position: relative;
+}
+
+.post-actions button[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 2px 8px var(--shadow);
+    margin-bottom: 8px;
+}
+
 /* Improved Button Styling */
 .action-btn {
     padding: 8px 16px;

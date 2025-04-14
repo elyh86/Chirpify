@@ -62,10 +62,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['new_post'])) {
 
 $posts = [];
 try {
-    $stmt = $conn->prepare("SELECT posts.*, users.username, users.profile_picture, 
-                            (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count, 
-                            (SELECT COUNT(*) FROM reposts WHERE reposts.post_id = posts.post_id) AS repost_count 
-                            FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at DESC");
+    $stmt = $conn->prepare("
+        SELECT 
+            posts.*,
+            users.username,
+            users.profile_picture,
+            (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count,
+            (SELECT COUNT(*) FROM reposts WHERE reposts.post_id = posts.post_id) AS repost_count,
+            GROUP_CONCAT(DISTINCT l_users.username) as likers
+        FROM posts 
+        JOIN users ON posts.user_id = users.user_id
+        LEFT JOIN likes ON posts.post_id = likes.post_id
+        LEFT JOIN users l_users ON likes.user_id = l_users.user_id
+        GROUP BY posts.post_id, posts.user_id, posts.content, posts.created_at, posts.image, 
+                 users.username, users.profile_picture
+        ORDER BY posts.created_at DESC
+    ");
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -156,10 +168,12 @@ try {
                                 break;
                             }
                         }
+                        $likers_array = $post['likers'] ? explode(',', $post['likers']) : [];
                         ?>
                         <form method="post" action="like.php" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" class="action-btn">
+                            <button type="submit" name="<?php echo $liked ? 'unlike' : 'like'; ?>" class="action-btn" 
+                                    title="<?php echo $likers_array ? 'Liked by: ' . implode(', ', $likers_array) : 'No likes yet'; ?>">
                                 ❤️ <?php echo $liked ? 'Unlike' : 'Like'; ?> (<?php echo $post['like_count']; ?>)
                             </button>
                         </form>

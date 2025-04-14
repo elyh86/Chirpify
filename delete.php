@@ -30,7 +30,7 @@ $type = $_GET['type'] ?? '';
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'index.php';
 
-if ($id <= 0 || !in_array($type, ['post', 'comment', 'user'])) {
+if ($id <= 0 || !in_array($type, ['post', 'comment', 'user', 'like'])) {
     header("Location: index.php");
     exit();
 }
@@ -46,6 +46,9 @@ try {
             $post = $stmt->fetch();
             
             if ($post && ($post['user_id'] == $_SESSION['user_id'] || $isUserAdmin)) {
+                // Delete associated likes first
+                $conn->prepare("DELETE FROM likes WHERE post_id = ?")->execute([$id]);
+
                 // Using cascading deletes for associated records
                 $conn->prepare("DELETE FROM posts WHERE post_id = ?")->execute([$id]);
             }
@@ -63,8 +66,18 @@ try {
 
         case 'user':
             if ($isUserAdmin && $id != $_SESSION['user_id']) {
+                // Delete user's likes
+                $conn->prepare("DELETE FROM likes WHERE user_id = ?")->execute([$id]);
+
                 // Using cascading deletes for associated records
                 $conn->prepare("DELETE FROM users WHERE user_id = ?")->execute([$id]);
+                $redirect = 'admin_panel.php';
+            }
+            break;
+
+        case 'like':
+            if ($isUserAdmin) {
+                $conn->prepare("DELETE FROM likes WHERE like_id = ?")->execute([$id]);
                 $redirect = 'admin_panel.php';
             }
             break;
